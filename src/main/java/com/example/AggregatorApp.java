@@ -1,7 +1,11 @@
 package com.example;
 
+import com.example.models.ItemsModel;
+import com.example.serder.JsonNodeSerde;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.*;
 import org.apache.kafka.streams.kstream.*;
@@ -23,36 +27,69 @@ public class AggregatorApp {
 
         // raw-items topic
         KStream<String, String> stream = builder.stream("raw-items");
+        // stream.peek((key, value)->{
+        // System.out.println(key + " " + value);
+        // });
+        // KTable<String, Long> aggregated = stream
+        // .mapValues(value -> {
+        // try {
+        // JsonNode json = mapper.readTree(value);
+        // String item = json.get("item").asText();
+        // int count = json.get("count").asInt();
+        // String timestamp = json.get("timestamp").asText();
+        // System.out.println(
+        // "RECEIVED PACKET: item=" + item + ", count=" + count + ", time - " +
+        // timestamp);
+        // // return json.get("item").asText() + "_" + json.get("org").asText()
+        // // + ":" + json.get("count").asInt();
+        // String key = json.get("item").asText() + "_" + json.get("org").asText();
+        // JsonNode packet = new ItemsModel(json).toJsonNode();
+        // return KeyValue.pair(key, packet);
+        // } catch (Exception e) {
+        // return KeyValue.pair("error", 0);
+        // }
+        // })
+        // .filter((key, value) -> !key.startsWith("error"))
+        // .map((key, value) -> {
+        // String[] parts = value.split(":");
+        // System.out.println("part " + parts[0]);
+        // return KeyValue.pair(parts[0], Long.parseLong(parts[1]));
+        // })
+        // // .groupByKey()
+        // // .reduce(Long::sum);
+        // .groupBy((k, v) -> k, Grouped.with(Serdes.String(), Serdes.Long()))
+        // .reduce(Long::sum, Materialized.with(Serdes.String(), Serdes.Long()));
 
-        KTable<String, Long> aggregated = stream
-                .mapValues(value -> {
+        KTable<String, JsonNode> aggregated = stream
+                .map((key, value) -> {
                     try {
                         JsonNode json = mapper.readTree(value);
                         String item = json.get("item").asText();
-                        int count = json.get("count").asInt();
-                        System.out.println("RECEIVED PACKET: item=" + item + ", count=" + count);
-                        return json.get("item").asText() + "_" + json.get("org").asText()
-                                + ":" + json.get("count").asInt();
+                        String org = json.get("org").asText();
+                        String customKey = item + "_" + org;
+
+                        JsonNode node = new ItemsModel(json).toJsonNode();
+                        return KeyValue.pair(customKey, node); // ✅ Now key is String, value is JsonNode
                     } catch (Exception e) {
-                        return "error:0";
+                        return null;
                     }
                 })
-                .filter((key, value) -> !value.startsWith("error"))
-                .map((key, value) -> {
-                    String[] parts = value.split(":");
-                    System.out.println("part " + parts[0]);
-                    return KeyValue.pair(parts[0], Long.parseLong(parts[1]));
-                })
-                // .groupByKey()
-                // .reduce(Long::sum);
-                .groupBy((k, v) -> k, Grouped.with(Serdes.String(), Serdes.Long()))
-                .reduce(Long::sum, Materialized.with(Serdes.String(), Serdes.Long()));
+                .filter((key, value) -> value != null)
+                .groupByKey(Grouped.with(Serdes.String(), new JsonNodeSerde()))
+                .reduce((v1, v2) -> {
+                    int count1 = v1.get("count").asInt();
+                    int count2 = v2.get("count").asInt();
+                    ObjectNode updated = v1.deepCopy();
+                    updated.put("count", count1 + count2);
+                    return updated;
+                });
 
         aggregated
                 .toStream()
                 .foreach((key, value) -> {
                     Instant currentTimestamp = Instant.now();
-                    System.out.println("AGGREGATED >> " + key + " = " + value + ", at " + currentTimestamp);
+                    System.out.println("AGGREGATED >> " + key + " = " + value + ", at " +
+                            currentTimestamp);
                 });
 
         // aggregated
@@ -66,7 +103,7 @@ public class AggregatorApp {
 
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.setUncaughtExceptionHandler((t, e) -> {
-            System.err.println("Stream error: " + e.getMessage());
+            System.err.println("Stream error 2: " + e.getMessage());
         });
         streams.start();
         System.out.println("AggregatorApp started. Waiting for messages...");
