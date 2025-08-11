@@ -22,9 +22,12 @@ public class EnergyParamAggLogsTopology {
         if (acc.aggregatedLogs == null) {
             acc.aggregatedLogs = new EnergyParamAggLogsTopology(null, null).getData();
         }
-        
+
         // import
         this.energy_active_import = acc.aggregatedLogs.energy_active_import + curr.energy_active_import_delta;
+        System.out.println("delta " + curr.energy_active_import_delta);
+        System.out.println("agg_import " + acc.aggregatedLogs.energy_active_import);
+        System.out.println("\n");
 
         if (curr.energy_active_import > 0) {
             this.energy_active_import_count = acc.aggregatedLogs.energy_active_import_count + 1;

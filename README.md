@@ -18,5 +18,5 @@ mvn exec:java -Dexec.mainClass="com.example.AggregatorApp"
 `
 or just
 `
-mvn exec:java"
+mvn exec:java
 `

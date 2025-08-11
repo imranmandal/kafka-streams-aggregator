@@ -13,11 +13,16 @@ public class StreamKeyUtil {
     private String delimiter = "____";
 
     public StreamKeyUtil(String comb_id, String org, long timestamp, int offsetSec, TimeBoundary boundary) {
-        this.comb_id = comb_id;
-        this.org = org;
-        this.timestamp = timestamp;
-        this.utcOffset = offsetSec;
-        this.boundaryUnit = boundary;
+        if (comb_id != null)
+            this.comb_id = comb_id;
+        if (org != null)
+            this.org = org;
+        if (timestamp > 0)
+            this.timestamp = timestamp;
+        if (offsetSec > 0)
+            this.utcOffset = offsetSec;
+        if (boundary != null)
+            this.boundaryUnit = boundary;
     }
 
     private static String streamKeyBuilder(String comb_id, String org, TimeBoundaryUtil boundaries, String delimiter) {
@@ -26,12 +31,16 @@ public class StreamKeyUtil {
     }
 
     public String getStreamKey() {
-        TimeBoundaryUtil BoundaryJson = new TimeBoundaryUtil(this.timestamp).utcOffset(utcOffset);
-        if (this.boundaryUnit == TimeBoundary.HOUR) {
-            this.boundaries = BoundaryJson.getHourlyBoundaries();
-        } else if (this.boundaryUnit == TimeBoundary.DAY) {
-            this.boundaries = BoundaryJson.getDayBoundaries();
-        }
+        this.boundaries = new TimeBoundaryUtil(this.timestamp).utcOffset(utcOffset)
+                .getBoundaries(this.boundaryUnit);
+        // TimeBoundaryUtil BoundaryJson = new
+        // TimeBoundaryUtil(this.timestamp).utcOffset(utcOffset);
+
+        // if (this.boundaryUnit == TimeBoundary.HOUR) {
+        // this.boundaries = BoundaryJson.getHourlyBoundaries();
+        // } else if (this.boundaryUnit == TimeBoundary.DAY) {
+        // this.boundaries = BoundaryJson.getDayBoundaries();
+        // }
 
         return streamKeyBuilder(this.comb_id, this.org, this.boundaries, this.delimiter);
     }

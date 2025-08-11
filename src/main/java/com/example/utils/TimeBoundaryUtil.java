@@ -90,4 +90,12 @@ public class TimeBoundaryUtil {
         this.endTime = endTIme;
         return this;
     }
+
+    public TimeBoundaryUtil getBoundaries(TimeBoundary boundaryUnit) {
+        if (boundaryUnit == TimeBoundary.HOUR)
+            return this.getHourlyBoundaries();
+
+        return this.getDayBoundaries();
+    }
+
 }

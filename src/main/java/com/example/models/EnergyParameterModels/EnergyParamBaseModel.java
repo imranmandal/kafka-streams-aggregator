@@ -14,7 +14,11 @@ public class EnergyParamBaseModel extends DlgPacketBaseModel {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public EnergyParamBaseModel(JsonNode pkt) {
+
         super(pkt);
+
+        if (pkt == null)
+            return;
 
         try {
 
@@ -29,10 +33,10 @@ public class EnergyParamBaseModel extends DlgPacketBaseModel {
             }
 
             if (this.prevEnergyParamPkt != null) {
-                this.energy_active_export_delta = this.energy_active_export
-                        - this.prevEnergyParamPkt.energy_active_export;
-                this.energy_active_import_delta = this.energy_active_import
-                        - this.prevEnergyParamPkt.energy_active_import;
+                this.energy_active_export_delta = this.energy_active_export_delta > 0 ? this.energy_active_export_delta
+                        : this.energy_active_export - this.prevEnergyParamPkt.energy_active_export;
+                this.energy_active_import_delta = this.energy_active_export_delta > 0 ? this.energy_active_export_delta
+                        : this.energy_active_import - this.prevEnergyParamPkt.energy_active_import;
 
             }
 
