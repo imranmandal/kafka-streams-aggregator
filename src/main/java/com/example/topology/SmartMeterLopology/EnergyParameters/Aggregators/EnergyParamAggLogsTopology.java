@@ -25,9 +25,6 @@ public class EnergyParamAggLogsTopology {
 
         // import
         this.energy_active_import = acc.aggregatedLogs.energy_active_import + curr.energy_active_import_delta;
-        System.out.println("delta " + curr.energy_active_import_delta);
-        System.out.println("agg_import " + acc.aggregatedLogs.energy_active_import);
-        System.out.println("\n");
 
         if (curr.energy_active_import > 0) {
             this.energy_active_import_count = acc.aggregatedLogs.energy_active_import_count + 1;
@@ -71,11 +68,8 @@ public class EnergyParamAggLogsTopology {
     }
 
     public EnergyParamAggLogsTopology parse(JsonNode packet) {
-
         if (packet == null)
             return this;
-
-        // System.out.println("packet "+ packet);
 
         if (packet.has("energy_active_import"))
             this.energy_active_import = packet.get("energy_active_import").doubleValue();

@@ -60,12 +60,6 @@ public class LogAggregator {
                                 utcOffsetSeconds, this.boundaryUnit);
 
                         String streamKey = streamKeyUtil.getStreamKey();
-                        // return KeyValue.pair(streamKey, energyParam);
-                        System.out.println("\nenergyParam " + energyParam.toJsonNode());
-
-                        if (energyParam.prevEnergyParamPkt != null) {
-
-                        }
 
                         /*
                          * 1. check prevPacket timestamp boundary
@@ -93,7 +87,7 @@ public class LogAggregator {
                             if (boundaries.startTime - energyParam.prevEnergyParamPkt.timestamp * 1000 > 10000) {
                                 int diff = 2;
                                 long timestamp = energyParam.prevEnergyParamPkt.timestamp;
-                                System.out.println("timestamp " + timestamp);
+
                                 while (true) {
                                     if (this.boundaryUnit == TimeBoundary.DAY) {
                                         timestamp += 60 * 60 * 24; // adding day seconds
@@ -141,8 +135,6 @@ public class LogAggregator {
                                             utcOffsetSeconds, this.boundaryUnit).getStreamKey();
 
                                     results.add(KeyValue.pair(streamKeyStr, packet));
-
-                                    System.out.println("-- packet " + packet.toJsonNode());
 
                                     // increment timestamp
                                     if (this.boundaryUnit == TimeBoundary.DAY) {
@@ -194,12 +186,6 @@ public class LogAggregator {
                     String keyname = windowedKey;
                     StreamKeyUtil key = new StreamKeyUtil("", "", 0, 0, TimeBoundary.UNKNOWN).parseStreamKey(keyname);
                     value.setTimestamp(key.boundaries.startTime, key.boundaries.endTime);
-
-                    System.out.println(
-                            "\n" + boundaryUnit + "\nKey: " + key + "\nStart: " + key.boundaries.startTime + " End: "
-                                    + key.boundaries.endTime + "\nValue:");
-                    System.out.print(value.toJsonNode());
-                    System.out.println("");
 
                     return KeyValue.pair(windowedKey, value);
                 })

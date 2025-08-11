@@ -30,7 +30,6 @@ public class DlgIngestAggregatorApp {
         KStream<String, EnergyParamBaseModel> stream = builder.stream("energy-parameter-test-2",
                 Consumed.with(Serdes.String(), Serdes.String()))
                 .map((key, value) -> {
-                    System.out.println(value);
                     try {
                         JsonNode json = mapper.readTree(value);
                         EnergyParamBaseModel energyParam = new EnergyParamBaseModel(json).getData();
