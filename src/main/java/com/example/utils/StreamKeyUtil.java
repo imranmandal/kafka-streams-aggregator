@@ -25,24 +25,23 @@ public class StreamKeyUtil {
             this.boundaryUnit = boundary;
     }
 
-    private static String streamKeyBuilder(String comb_id, String org, TimeBoundaryUtil boundaries, String delimiter) {
-        String key = comb_id + delimiter + org + delimiter + boundaries.startTime + delimiter + boundaries.endTime;
+    private static String streamKeyBuilder(String[] parameters, String delimiter) {
+        String key = String.join(delimiter, parameters);
         return key;
     }
 
-    public String getStreamKey() {
+    public String getStreamKey(String suffix) {
         this.boundaries = new TimeBoundaryUtil(this.timestamp).utcOffset(utcOffset)
                 .getBoundaries(this.boundaryUnit);
-        // TimeBoundaryUtil BoundaryJson = new
-        // TimeBoundaryUtil(this.timestamp).utcOffset(utcOffset);
 
-        // if (this.boundaryUnit == TimeBoundary.HOUR) {
-        // this.boundaries = BoundaryJson.getHourlyBoundaries();
-        // } else if (this.boundaryUnit == TimeBoundary.DAY) {
-        // this.boundaries = BoundaryJson.getDayBoundaries();
-        // }
+        String[] parameters = {
+                this.comb_id, this.org,
+                Long.toString(boundaries.startTime),
+                Long.toString(boundaries.endTime),
+                "test-suffix-" + suffix
+        };
 
-        return streamKeyBuilder(this.comb_id, this.org, this.boundaries, this.delimiter);
+        return streamKeyBuilder(parameters, this.delimiter);
     }
 
     public StreamKeyUtil parseStreamKey(String key) {

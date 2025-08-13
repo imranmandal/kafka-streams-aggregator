@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class EnergyParamAggLogsTopology {
+public class EnergyParamAggMinMaxTopology {
     public double energy_active_import = 0;
     public double energy_active_import_min = Double.MAX_VALUE;
     public double energy_active_import_max = Double.MIN_VALUE;
@@ -15,59 +15,67 @@ public class EnergyParamAggLogsTopology {
     public double energy_active_export_max = Double.MIN_VALUE;
     public int energy_active_export_count = 0;
 
-    public EnergyParamAggLogsTopology(EnergyParamAgg acc, EnergyParamBaseModel curr) {
+    public EnergyParamAggMinMaxTopology(EnergyParamAgg acc, EnergyParamBaseModel curr) {
         if (acc == null)
             return;
 
-        if (acc.aggregatedLogs == null) {
-            acc.aggregatedLogs = new EnergyParamAggLogsTopology(null, null).getData();
+        if (acc.durationLogsAgg == null) {
+            acc.durationLogsAgg = new EnergyParamAggMinMaxTopology(null, null).getData();
         }
 
         // import
-        this.energy_active_import = acc.aggregatedLogs.energy_active_import + curr.energy_active_import_delta;
+        this.energy_active_import = acc.durationLogsAgg.energy_active_import + curr.energy_active_import_delta;
 
         if (curr.energy_active_import > 0) {
-            this.energy_active_import_count = acc.aggregatedLogs.energy_active_import_count + 1;
+            this.energy_active_import_count = acc.durationLogsAgg.energy_active_import_count + 1;
         } else {
-            this.energy_active_import_count = acc.aggregatedLogs.energy_active_import_count;
+            this.energy_active_import_count = acc.durationLogsAgg.energy_active_import_count;
         }
 
-        if (acc.aggregatedLogs.energy_active_import_min > curr.energy_active_import) {
+        if (curr.prevEnergyParamPkt != null
+                && acc.durationLogsAgg.energy_active_import_min > curr.prevEnergyParamPkt.energy_active_import) {
+            // checking prevPacket import value
+            this.energy_active_import_min = curr.prevEnergyParamPkt.energy_active_import;
+        } else if (acc.durationLogsAgg.energy_active_import_min > curr.energy_active_import) {
             this.energy_active_import_min = curr.energy_active_import;
         } else {
-            this.energy_active_import_min = acc.aggregatedLogs.energy_active_import_min;
+            this.energy_active_import_min = acc.durationLogsAgg.energy_active_import_min;
         }
 
-        if (acc.aggregatedLogs.energy_active_import_max < curr.energy_active_import) {
+        if (acc.durationLogsAgg.energy_active_import_max < curr.energy_active_import) {
             this.energy_active_import_max = curr.energy_active_import;
         } else {
-            this.energy_active_import_max = acc.aggregatedLogs.energy_active_import_max;
+            this.energy_active_import_max = acc.durationLogsAgg.energy_active_import_max;
         }
 
         // export
-        this.energy_active_export = acc.aggregatedLogs.energy_active_export + curr.energy_active_export_delta;
+        this.energy_active_export = acc.durationLogsAgg.energy_active_export + curr.energy_active_export_delta;
 
         if (curr.energy_active_export > 0) {
-            this.energy_active_export_count = acc.aggregatedLogs.energy_active_export_count + 1;
+            this.energy_active_export_count = acc.durationLogsAgg.energy_active_export_count + 1;
         } else {
-            this.energy_active_export_count = acc.aggregatedLogs.energy_active_export_count;
+            this.energy_active_export_count = acc.durationLogsAgg.energy_active_export_count;
         }
 
-        if (acc.aggregatedLogs.energy_active_export_min > curr.energy_active_export) {
+        if (curr.prevEnergyParamPkt != null
+                && acc.durationLogsAgg.energy_active_export_min > curr.prevEnergyParamPkt.energy_active_export) {
+            // checking prevPacket export value
+            this.energy_active_export_min = curr.prevEnergyParamPkt.energy_active_export;
+        } else if (acc.durationLogsAgg.energy_active_export_min > curr.energy_active_export) {
             this.energy_active_export_min = curr.energy_active_export;
         } else {
-            this.energy_active_export_min = acc.aggregatedLogs.energy_active_export_min;
+            this.energy_active_export_min = acc.durationLogsAgg.energy_active_export_min;
         }
 
-        if (acc.aggregatedLogs.energy_active_export_max < curr.energy_active_export) {
+        if (acc.durationLogsAgg.energy_active_export_max < curr.energy_active_export) {
             this.energy_active_export_max = curr.energy_active_export;
         } else {
-            this.energy_active_export_max = acc.aggregatedLogs.energy_active_export_max;
+            this.energy_active_export_max = acc.durationLogsAgg.energy_active_export_max;
         }
 
     }
 
-    public EnergyParamAggLogsTopology parse(JsonNode packet) {
+    public EnergyParamAggMinMaxTopology parse(JsonNode packet) {
         if (packet == null)
             return this;
 
@@ -105,7 +113,7 @@ public class EnergyParamAggLogsTopology {
     }
 
     @JsonIgnore
-    public EnergyParamAggLogsTopology getData() {
+    public EnergyParamAggMinMaxTopology getData() {
         return this;
     }
 }

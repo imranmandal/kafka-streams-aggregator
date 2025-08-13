@@ -21,7 +21,6 @@ public class EnergyParamBaseModel extends DlgPacketBaseModel {
             return;
 
         try {
-
             JsonNode energyExportJsonNode = pkt.get("energy_active_export");
             if (energyExportJsonNode != null) {
                 this.energy_active_export = energyExportJsonNode.doubleValue();
@@ -33,11 +32,29 @@ public class EnergyParamBaseModel extends DlgPacketBaseModel {
             }
 
             if (this.prevEnergyParamPkt != null) {
-                this.energy_active_export_delta = this.energy_active_export_delta > 0 ? this.energy_active_export_delta
-                        : this.energy_active_export - this.prevEnergyParamPkt.energy_active_export;
-                this.energy_active_import_delta = this.energy_active_export_delta > 0 ? this.energy_active_export_delta
-                        : this.energy_active_import - this.prevEnergyParamPkt.energy_active_import;
+                // this.energy_active_export_delta = this.energy_active_export_delta > 0 ?
+                // this.energy_active_export_delta
+                // : this.energy_active_export - this.prevEnergyParamPkt.energy_active_export;
+                // this.energy_active_import_delta = this.energy_active_import_delta > 0 ?
+                // this.energy_active_import_delta
+                // : this.energy_active_import - this.prevEnergyParamPkt.energy_active_import;
 
+                this.energy_active_export_delta = this.energy_active_export
+                        - this.prevEnergyParamPkt.energy_active_export;
+                this.energy_active_import_delta = this.energy_active_import
+                        - this.prevEnergyParamPkt.energy_active_import;
+
+            } else {
+                if (energyImportJsonNode != null) {
+                    // this step is to handle deserialization
+                    if (energyImportJsonNode.has("energy_active_export_delta"))
+                        this.energy_active_export_delta = energyImportJsonNode.get("energy_active_export_delta")
+                                .doubleValue();
+
+                    if (energyImportJsonNode.has("energy_active_import_delta"))
+                        this.energy_active_import_delta = energyImportJsonNode.get("energy_active_import_delta")
+                                .doubleValue();
+                }
             }
 
         } catch (Exception e) {

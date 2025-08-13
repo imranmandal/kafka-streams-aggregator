@@ -16,8 +16,40 @@ import org.apache.kafka.streams.kstream.*;
 public class DlgIngestAggregatorApp {
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    public enum AggregatorTopology {
+        DURATION_LOG_AGG,
+        PACKETS_AGG,
+    }
+
+    // function to generate a random string of length n
+    static String getSuffix(int n) {
+
+        // choose a Character random from this String
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                + "0123456789"
+                + "abcdefghijklmnopqrstuvxyz";
+
+        // create StringBuffer size of AlphaNumericString
+        StringBuilder sb = new StringBuilder(n);
+
+        for (int i = 0; i < n; i++) {
+
+            // generate a random number between
+            // 0 to AlphaNumericString variable length
+            int index = (int) (AlphaNumericString.length()
+                    * Math.random());
+
+            // add Character one by one in end of sb
+            sb.append(AlphaNumericString
+                    .charAt(index));
+        }
+
+        return sb.toString();
+    }
+
     public static void main(String args[]) {
 
+        String testSuffix = "-test-11";
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "aggregator-app");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -27,7 +59,7 @@ public class DlgIngestAggregatorApp {
 
         StreamsBuilder builder = new StreamsBuilder();
 
-        KStream<String, EnergyParamBaseModel> stream = builder.stream("energy-parameter-test-2",
+        KStream<String, EnergyParamBaseModel> stream = builder.stream("energy-parameter" + testSuffix,
                 Consumed.with(Serdes.String(), Serdes.String()))
                 .map((key, value) -> {
                     try {
@@ -42,95 +74,40 @@ public class DlgIngestAggregatorApp {
                 })
                 .filter((key, value) -> value != null);
 
-        // **********
-        // ----------
-        // ----- Daily agg log
-        // ----------
-        // **********
-
+        // // ----- Daily agg log
+        // AggregatorTopology[] dailyAggTopologyStages = {
+        // AggregatorTopology.DURATION_LOG_AGG,
+        // AggregatorTopology.PACKETS_AGG
+        // };
         // new LogAggregator(stream, TimeBoundary.DAY,
-        // "energy-param-daily-agg-store-test-2",
-        // "energy-param-daily-agg-test-2").aggregate();
+        // "energy-param-daily-agg-store" + testSuffix,
+        // "energy-param-daily-agg" + testSuffix,
+        // dailyAggTopologyStages,
+        // testSuffix + getSuffix(4))
+        // .aggregate();
 
-        // KStream<String, EnergyParamBaseModel> dailyAggStream = stream
-        // .map((key, energyParam) -> {
-        // try {
-        // int utcOffsetSeconds = (energyParam.utc_offset != null ?
-        // energyParam.utc_offset : 0) * 60;
-        // String streamKey = new StreamKeyUtil(energyParam.comb_id, energyParam.org,
-        // energyParam.timestamp,
-        // utcOffsetSeconds, TimeBoundary.DAY)
-        // .getStreamKey();
-
-        // return KeyValue.pair(streamKey, energyParam);
-        // } catch (Exception e) {
-        // System.err.println("DlgAggErr " + e.getMessage());
-        // return null;
-        // }
-        // })
-        // .filter((key, value) -> value != null);
-
-        // KTable<String, EnergyParamAgg> dailyAggregated = dailyAggStream
-        // .groupByKey(Grouped.with("dailyAggregated", Serdes.String(), new
-        // EnergyParamSerde()))
-        // .aggregate(
-        // () -> new EnergyParamAgg(null, null).getDefaultValue(),
-        // (aggKey, newValue, aggValue) -> {
-        // try {
-        // aggValue = new EnergyParamAgg(aggValue, newValue).getData();
-        // } catch (Exception e) {
-        // System.err.println("DlgAggError " + e.getMessage());
-        // }
-        // return aggValue;
-        // },
-        // Materialized
-        // .<String, EnergyParamAgg, KeyValueStore<Bytes,
-        // byte[]>>as("energy-param-daily-agg-9")
-        // .withKeySerde(Serdes.String())
-        // .withValueSerde(new EnergyParamAggSerde()));
-
-        // dailyAggregated
-        // .toStream()
-        // .map((windowedKey, value) -> {
-        // String keyname = windowedKey;
-        // StreamKeyUtil key = new StreamKeyUtil("", "", 0, 0,
-        // TimeBoundary.UNKNOWN).parseStreamKey(keyname);
-        // value.setTimestamp(key.boundaries.startTime, key.boundaries.endTime);
-
-        // System.out.println(
-        // "Daily - " + "\nKey: " + key + "\nStart: " + key.boundaries.startTime + "
-        // End: "
-        // + key.boundaries.endTime + "\nValue:");
-        // System.out.print(value.toJsonNode());
-        // System.out.println("");
-
-        // return KeyValue.pair(windowedKey, value);
-        // })
-        // .to("energy-parameter-daily", Produced.with(Serdes.String(), new
-        // EnergyParamAggSerde()));
-
-        // ----- Daily agg log end
-        // ----------
-        // **********
-
-        // **********
-        // ----------
         // ----- Hourly agg log
-        // ----------
-        // **********
+        AggregatorTopology[] hourlyAggTopologyStages = {
+                AggregatorTopology.DURATION_LOG_AGG,
+                AggregatorTopology.PACKETS_AGG
+        };
+        new LogAggregator(
+                stream,
+                TimeBoundary.HOUR,
+                "energy-param-hourly-agg-store" + testSuffix,
+                "energy-param-hourly-agg" + testSuffix,
+                hourlyAggTopologyStages,
+                testSuffix + getSuffix(4))
+                .aggregate();
 
-        new LogAggregator(stream, TimeBoundary.HOUR,
-                "energy-param-hourly-agg-store-test-2",
-                "energy-param-hourly-agg-test-2").aggregate();
-
-        // KStream<String, EnergyParamBaseModel> hourlyAggStream = stream
+        // KGroupedStream<String, EnergyParamBaseModel> groupStream = stream
         // .map((key, energyParam) -> {
         // try {
         // int utcOffsetSeconds = (energyParam.utc_offset != null ?
         // energyParam.utc_offset : 0) * 60;
         // String streamKey = new StreamKeyUtil(energyParam.comb_id, energyParam.org,
         // energyParam.timestamp,
-        // utcOffsetSeconds, TimeBoundary.DAY)
+        // utcOffsetSeconds, TimeBoundary.HOUR)
         // .getStreamKey();
 
         // return KeyValue.pair(streamKey, energyParam);
@@ -139,56 +116,18 @@ public class DlgIngestAggregatorApp {
         // return null;
         // }
         // })
-        // .filter((key, value) -> value != null);
-
-        // KTable<String, EnergyParamAgg> hourlyAggregated = hourlyAggStream
-        // .groupByKey(Grouped.with("hourlyAggregated", Serdes.String(), new
+        // .filter((key, value) -> value != null)
+        // .groupByKey(Grouped.with("groupName", Serdes.String(), new
         // EnergyParamSerde()))
-        // .aggregate(
-        // () -> new EnergyParamAgg(null, null).getDefaultValue(),
-        // (aggKey, newValue, aggValue) -> {
-        // try {
-        // aggValue = new EnergyParamAgg(aggValue, newValue).getData();
-        // } catch (Exception e) {
-        // System.err.println("DlgAggError " + e.getMessage());
-        // }
-        // return aggValue;
-        // },
-        // Materialized
-        // .<String, EnergyParamAgg, KeyValueStore<Bytes,
-        // byte[]>>as("energy-param-hourly-agg-9")
-        // .withKeySerde(Serdes.String())
-        // .withValueSerde(new EnergyParamAggSerde()));
 
-        // hourlyAggregated
-        // .toStream()
-        // .map((windowedKey, value) -> {
-        // String keyname = windowedKey;
-        // StreamKeyUtil key = new StreamKeyUtil("", "", 0, 0,
-        // TimeBoundary.UNKNOWN).parseStreamKey(keyname);
-        // value.setTimestamp(key.boundaries.startTime, key.boundaries.endTime);
-
-        // System.out.println(
-        // "hourly - " + "\nKey: " + key + "\nStart: " + key.boundaries.startTime + "
-        // End: "
-        // + key.boundaries.endTime + "\nValue:");
-        // System.out.print(value.toJsonNode());
-        // System.out.println("");
-
-        // return KeyValue.pair(windowedKey, value);
-        // })
-        // .to("energy-parameter-hourly", Produced.with(Serdes.String(), new
-        // EnergyParamAggSerde()));
-
-        // ----- Hourly agg log end
-        // ----------
-        // **********
+        // ;
 
         KafkaStreams streams = new KafkaStreams(builder.build(), props);
         streams.setUncaughtExceptionHandler((t, e) -> {
             System.err.println(e);
             System.err.println("Stream error 1: " + e.getMessage());
         });
+        streams.cleanUp();
         streams.start();
         System.out.println("DlgIngestAggregatorApp started. Waiting for messages...");
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
@@ -198,7 +137,7 @@ public class DlgIngestAggregatorApp {
 // {"comb_id":"3z3gc8h3-6",
 // "meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null",
 // "from":1752690600000,"to":1752777000000,"isAgg":true,
-// "aggregatedLogs":{
+// "durationLogsAgg":{
 // "energy_active_import":1146368.0, 1146368
 // "energy_active_import_min":1.582920704E9, 1582918528
 // "energy_active_import_max":1.584276992E9, 1584064896

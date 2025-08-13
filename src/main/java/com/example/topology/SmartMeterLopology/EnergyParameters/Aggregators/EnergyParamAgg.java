@@ -1,5 +1,6 @@
 package com.example.topology.SmartMeterLopology.EnergyParameters.Aggregators;
 
+import com.example.DlgIngestAggregatorApp.AggregatorTopology;
 import com.example.models.EnergyParameterModels.EnergyParamBaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,7 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class EnergyParamAgg extends AggregationBaseTopology {
 
     public boolean isAgg = true;
-    public EnergyParamAggLogsTopology aggregatedLogs = null;
+    public EnergyParamAggMinMaxTopology durationLogsAgg = null;
+    public EnergyParamPacketsAggTopology packetsAgg = null;
+    AggregatorTopology[] topologyStages;
     // public DailyAggTopology uptime;
 
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -16,16 +19,24 @@ public class EnergyParamAgg extends AggregationBaseTopology {
     @JsonIgnore
     private EnergyParamAgg defaultValue; // for serder to ignore defaultValue
 
-    public EnergyParamAgg(EnergyParamAgg acc, EnergyParamBaseModel curr) {
+    public EnergyParamAgg(EnergyParamAgg acc, EnergyParamBaseModel curr, AggregatorTopology[] topologyStages) {
         super(curr);
 
         if (acc == null || curr == null)
             return;
 
-        try {
-            this.aggregatedLogs = new EnergyParamAggLogsTopology(acc, curr).getData();
-        } catch (Exception e) {
-            System.err.println("EnergyParamAgg error" + e.getMessage());
+        this.topologyStages = topologyStages;
+        for (AggregatorTopology topology : topologyStages) {
+
+            try {
+                if (topology == AggregatorTopology.DURATION_LOG_AGG) {
+                    this.durationLogsAgg = new EnergyParamAggMinMaxTopology(acc, curr).getData();
+                } else if (topology == AggregatorTopology.PACKETS_AGG) {
+                    this.packetsAgg = new EnergyParamPacketsAggTopology(acc, curr).getData();
+                }
+            } catch (Exception e) {
+                System.err.println(topology + e.getMessage());
+            }
         }
 
     }
@@ -64,17 +75,21 @@ public class EnergyParamAgg extends AggregationBaseTopology {
             this.to = (packet.get("to").longValue());
         }
 
-        if (packet.has("aggregatedLogs"))
-            this.aggregatedLogs = new EnergyParamAggLogsTopology(null, null).parse(packet.get("aggregatedLogs"));
+        if (packet.has("durationLogsAgg"))
+            this.durationLogsAgg = new EnergyParamAggMinMaxTopology(null, null).parse(packet.get("durationLogsAgg"));
+
+        if (packet.has("packetsAgg"))
+            this.packetsAgg = new EnergyParamPacketsAggTopology(null, null).parse(packet.get("packetsAgg"));
 
         return this;
+
     }
 
     // public EnergyParamAgg aggregate(EnergyParamAgg acc, EnergyParamBaseModel
     // curr) {
     // // this.dailyUptime = new DailyAggTopology().parse(acc, curr);
     // // need to handle rest agg here
-    // this.aggregatedLogs = new EnergyParamAggLogsTopology(acc, curr).getData();
+    // this.durationLogsAgg = new EnergyParamAggLogsTopology(acc, curr).getData();
 
     // return this;
     // }
