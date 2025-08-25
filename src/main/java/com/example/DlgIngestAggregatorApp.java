@@ -2,8 +2,10 @@ package com.example;
 
 import java.util.Properties;
 
-import com.example.Aggregators.LogAggregator;
+import com.example.Aggregators.EnergyParamLogAggregator;
+import com.example.Aggregators.InstantaneousParamLogAggregator;
 import com.example.models.EnergyParameterModels.EnergyParamBaseModel;
+import com.example.models.InstantaneousParameterModels.InstantaneousParamBaseModel;
 import com.example.utils.EventTimeExtractor;
 import com.example.utils.TimeBoundaryUtil.TimeBoundary;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -59,7 +61,7 @@ public class DlgIngestAggregatorApp {
 
         StreamsBuilder builder = new StreamsBuilder();
 
-        KStream<String, EnergyParamBaseModel> stream = builder.stream("energy-parameter" + testSuffix,
+        KStream<String, EnergyParamBaseModel> energyParamStream = builder.stream("energy-parameter" + testSuffix,
                 Consumed.with(Serdes.String(), Serdes.String()))
                 .map((key, value) -> {
                     try {
@@ -67,6 +69,22 @@ public class DlgIngestAggregatorApp {
                         EnergyParamBaseModel energyParam = new EnergyParamBaseModel(json).getData();
 
                         return KeyValue.pair(key, energyParam);
+                    } catch (Exception e) {
+                        System.err.println("DlgAggErr " + e.getMessage());
+                        return null;
+                    }
+                })
+                .filter((key, value) -> value != null);
+
+        KStream<String, InstantaneousParamBaseModel> instantParamStream = builder
+                .stream("instantaneous-parameter" + testSuffix,
+                        Consumed.with(Serdes.String(), Serdes.String()))
+                .map((key, value) -> {
+                    try {
+                        JsonNode json = mapper.readTree(value);
+                        InstantaneousParamBaseModel data = new InstantaneousParamBaseModel(json).getData();
+
+                        return KeyValue.pair(key, data);
                     } catch (Exception e) {
                         System.err.println("DlgAggErr " + e.getMessage());
                         return null;
@@ -91,11 +109,20 @@ public class DlgIngestAggregatorApp {
                 AggregatorTopology.DURATION_LOG_AGG,
                 AggregatorTopology.PACKETS_AGG
         };
-        new LogAggregator(
-                stream,
+        new EnergyParamLogAggregator(
+                energyParamStream,
                 TimeBoundary.HOUR,
                 "energy-param-hourly-agg-store" + testSuffix,
                 "energy-param-hourly-agg" + testSuffix,
+                hourlyAggTopologyStages,
+                testSuffix + getSuffix(4))
+                .aggregate();
+
+        new InstantaneousParamLogAggregator(
+                instantParamStream,
+                TimeBoundary.HOUR,
+                "instantaneous-param-hourly-agg-store" + testSuffix,
+                "instantaneous-param-hourly-agg" + testSuffix,
                 hourlyAggTopologyStages,
                 testSuffix + getSuffix(4))
                 .aggregate();

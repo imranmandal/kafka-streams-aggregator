@@ -4,7 +4,7 @@ import com.example.DlgIngestAggregatorApp.AggregatorTopology;
 import com.example.models.EnergyParameterModels.EnergyParamBaseModel;
 import com.example.serder.EnergyParamAggSerde;
 import com.example.serder.EnergyParamSerde;
-import com.example.topology.SmartMeterLopology.EnergyParameters.Aggregators.EnergyParamAgg;
+import com.example.topology.SmartMeterTopology.EnergyParameters.EnergyParamAggTopology;
 import com.example.utils.StreamKeyUtil;
 import com.example.utils.TimeBoundaryUtil.TimeBoundary;
 
@@ -14,7 +14,7 @@ import org.apache.kafka.streams.*;
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
 
-public class LogAggregator {
+public class EnergyParamLogAggregator {
     private KStream<String, EnergyParamBaseModel> stream;
     private TimeBoundary boundaryUnit;
     private String groupName = "";
@@ -23,7 +23,7 @@ public class LogAggregator {
     private String keySuffix = "";
     AggregatorTopology[] topologyStages;
 
-    public LogAggregator(KStream<String, EnergyParamBaseModel> stream, TimeBoundary boundaryUnit, String storeName,
+    public EnergyParamLogAggregator(KStream<String, EnergyParamBaseModel> stream, TimeBoundary boundaryUnit, String storeName,
             String outputTopic, AggregatorTopology[] topologyStages, String keySuffix) {
         this.stream = stream;
         this.boundaryUnit = boundaryUnit;
@@ -168,20 +168,20 @@ public class LogAggregator {
         // return results;
         // })
 
-        KTable<String, EnergyParamAgg> aggregated = aggStream
+        KTable<String, EnergyParamAggTopology> aggregated = aggStream
                 .groupByKey(Grouped.with(groupName, Serdes.String(), new EnergyParamSerde()))
                 .aggregate(
-                        () -> new EnergyParamAgg(null, null, this.topologyStages).getDefaultValue(),
+                        () -> new EnergyParamAggTopology(null, null, this.topologyStages).getDefaultValue(),
                         (aggKey, newValue, aggValue) -> {
                             try {
-                                aggValue = new EnergyParamAgg(aggValue, newValue, this.topologyStages).getData();
+                                aggValue = new EnergyParamAggTopology(aggValue, newValue, this.topologyStages).getData();
                             } catch (Exception e) {
                                 System.err.println("DlgAggError " + e.getMessage());
                             }
                             return aggValue;
                         },
                         Materialized
-                                .<String, EnergyParamAgg, KeyValueStore<Bytes, byte[]>>as(this.storeName)
+                                .<String, EnergyParamAggTopology, KeyValueStore<Bytes, byte[]>>as(this.storeName)
                                 .withKeySerde(Serdes.String())
                                 .withValueSerde(new EnergyParamAggSerde(this.topologyStages)));
 
@@ -193,7 +193,7 @@ public class LogAggregator {
                     value.setTimestamp(key.boundaries.startTime, key.boundaries.endTime);
 
                     System.out.println(
-                            "\n" + boundaryUnit + "\nKey: " + key + "\nStart: " + key.boundaries.startTime + " End: "
+                            "\nEnergy\n" + boundaryUnit + "\nKey: " + key + "\nStart: " + key.boundaries.startTime + " End: "
                                     + key.boundaries.endTime + "\nValue:");
                     System.out.print(value.toJsonNode());
                     System.out.println("");

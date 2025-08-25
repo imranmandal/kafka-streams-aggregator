@@ -1,14 +1,14 @@
-package com.example.topology.SmartMeterLopology.EnergyParameters.Aggregators;
+package com.example.topology.SmartMeterTopology.EnergyParameters;
 
 import com.example.DlgIngestAggregatorApp.AggregatorTopology;
 import com.example.models.EnergyParameterModels.EnergyParamBaseModel;
+import com.example.topology.AggregationBaseTopology;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class EnergyParamAgg extends AggregationBaseTopology {
+public class EnergyParamAggTopology extends AggregationBaseTopology {
 
-    public boolean isAgg = true;
     public EnergyParamAggMinMaxTopology durationLogsAgg = null;
     public EnergyParamPacketsAggTopology packetsAgg = null;
     AggregatorTopology[] topologyStages;
@@ -17,9 +17,10 @@ public class EnergyParamAgg extends AggregationBaseTopology {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     @JsonIgnore
-    private EnergyParamAgg defaultValue; // for serder to ignore defaultValue
+    private EnergyParamAggTopology defaultValue; // for serder to ignore defaultValue
 
-    public EnergyParamAgg(EnergyParamAgg acc, EnergyParamBaseModel curr, AggregatorTopology[] topologyStages) {
+    public EnergyParamAggTopology(EnergyParamAggTopology acc, EnergyParamBaseModel curr,
+            AggregatorTopology[] topologyStages) {
         super(curr);
 
         if (acc == null || curr == null)
@@ -35,17 +36,18 @@ public class EnergyParamAgg extends AggregationBaseTopology {
                     this.packetsAgg = new EnergyParamPacketsAggTopology(acc, curr).getData();
                 }
             } catch (Exception e) {
-                System.err.println(topology + e.getMessage());
+                System.err
+                        .println("\nEnergyParamAggTopology " + " topology:" + topology + ", error: " + e.getMessage());
             }
         }
 
     }
 
-    public EnergyParamAgg getDefaultValue() {
+    public EnergyParamAggTopology getDefaultValue() {
         return this;
     }
 
-    public EnergyParamAgg parse(JsonNode packet) {
+    public EnergyParamAggTopology parse(JsonNode packet) {
         if (packet == null)
             return this;
 
@@ -75,8 +77,9 @@ public class EnergyParamAgg extends AggregationBaseTopology {
             this.to = (packet.get("to").longValue());
         }
 
-        if (packet.has("durationLogsAgg"))
-            this.durationLogsAgg = new EnergyParamAggMinMaxTopology(null, null).parse(packet.get("durationLogsAgg"));
+        if (packet.has("durationLogsAgg") && packet.get("durationLogsAgg").has("min_max_agg"))
+            this.durationLogsAgg = new EnergyParamAggMinMaxTopology(null, null)
+                    .parse(packet.get("durationLogsAgg").get("min_max_agg"));
 
         if (packet.has("packetsAgg"))
             this.packetsAgg = new EnergyParamPacketsAggTopology(null, null).parse(packet.get("packetsAgg"));
@@ -106,7 +109,7 @@ public class EnergyParamAgg extends AggregationBaseTopology {
     }
 
     @JsonIgnore
-    public EnergyParamAgg getData() {
+    public EnergyParamAggTopology getData() {
         return this;
     }
 }

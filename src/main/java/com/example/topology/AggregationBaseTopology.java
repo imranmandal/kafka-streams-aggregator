@@ -1,4 +1,4 @@
-package com.example.topology.SmartMeterLopology.EnergyParameters.Aggregators;
+package com.example.topology;
 
 import com.example.models.DlgPacketBaseModel;
 

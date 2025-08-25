@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class EnergyParameterPacketModel {
     public double energy_active_export = 0;
     public double energy_active_import = 0;
+    public double app_energy_active_export = 0;
+    public double app_energy_active_import = 0;
     public Long timestamp;
     public Boolean error;
 
@@ -18,6 +20,8 @@ public class EnergyParameterPacketModel {
 
         this.energy_active_export = data.energy_active_export;
         this.energy_active_import = data.energy_active_import;
+        this.app_energy_active_export = data.app_energy_active_export;
+        this.app_energy_active_import = data.app_energy_active_import;
         this.timestamp = data.timestamp * 1000;
         this.error = data.error;
     }
@@ -39,6 +43,8 @@ public class EnergyParameterPacketModel {
 
         this.energy_active_export = packet.get("energy_active_export").asDouble();
         this.energy_active_import = packet.get("energy_active_import").asDouble();
+        this.app_energy_active_export = packet.get("app_energy_active_export").asDouble();
+        this.app_energy_active_import = packet.get("app_energy_active_import").asDouble();
         this.timestamp = packet.get("timestamp").asLong();
         this.error = packet.get("error").asBoolean();
         return this;
