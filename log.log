@@ -1,92 +1,92 @@
-Key: com.example.utils.StreamKeyUtil@301b382b
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@301b382b
 Start: 1752690600000 End: 1752777000000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752690600000,"to":1752777000000,"isAgg":true,"durationLogsAgg":{"energy_active_import":1146368.0,"energy_active_import_min":1.582920704E9,"energy_active_import_max":1.584276992E9,"energy_active_import_count":979,"energy_active_export":2.4399410000005446,"energy_active_export_min":4963.928223,"energy_active_export_max":4966.671875,"energy_active_export_count":979}}
-Key: com.example.utils.StreamKeyUtil@2ae1e2f1
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@2ae1e2f1
 Start: 1752694200000 End: 1752697800000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752694200000,"to":1752697800000,"isAgg":true,"durationLogsAgg":{"energy_active_import":2176.0,"energy_active_import_min":1.582920704E9,"energy_active_import_max":1.582920704E9,"energy_active_import_count":2,"energy_active_export":0.0,"energy_active_export_min":4963.928223,"energy_active_export_max":4963.928223,"energy_active_export_count":2}}
-Key: com.example.utils.StreamKeyUtil@4b1d4c5
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@4b1d4c5
 Start: 1752701400000 End: 1752705000000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752701400000,"to":1752705000000,"isAgg":true,"durationLogsAgg":{"energy_active_import":128.0,"energy_active_import_min":1.582920704E9,"energy_active_import_max":1.582920832E9,"energy_active_import_count":7,"energy_active_export":0.0,"energy_active_export_min":4963.928223,"energy_active_export_max":4963.928223,"energy_active_export_count":7}}
-Key: com.example.utils.StreamKeyUtil@21e258c8
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@21e258c8
 Start: 1752705000000 End: 1752708600000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752705000000,"to":1752708600000,"isAgg":true,"durationLogsAgg":{"energy_active_import":99328.0,"energy_active_import_min":1.582920832E9,"energy_active_import_max":1.58302016E9,"energy_active_import_count":65,"energy_active_export":0.0,"energy_active_export_min":4963.928223,"energy_active_export_max":4963.928223,"energy_active_export_count":65}}
-Key: com.example.utils.StreamKeyUtil@546c3e48
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@546c3e48
 Start: 1752708600000 End: 1752712200000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752708600000,"to":1752712200000,"isAgg":true,"durationLogsAgg":{"energy_active_import":142592.0,"energy_active_import_min":1.58302272E9,"energy_active_import_max":1.583162752E9,"energy_active_import_count":71,"energy_active_export":0.48779300000023795,"energy_active_export_min":4963.928223,"energy_active_export_max":4964.416016,"energy_active_export_count":71}}
-Key: com.example.utils.StreamKeyUtil@7c07acaa
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@7c07acaa
 Start: 1752712200000 End: 1752715800000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752712200000,"to":1752715800000,"isAgg":true,"durationLogsAgg":{"energy_active_import":39168.0,"energy_active_import_min":1.583165184E9,"energy_active_import_max":1.58320192E9,"energy_active_import_count":15,"energy_active_export":0.0,"energy_active_export_min":4964.416016,"energy_active_export_max":4964.416016,"energy_active_export_count":15}}
-Key: com.example.utils.StreamKeyUtil@761a4813
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@761a4813
 Start: 1752715800000 End: 1752719400000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752715800000,"to":1752719400000,"isAgg":true,"durationLogsAgg":{"energy_active_import":122624.0,"energy_active_import_min":1.58320192E9,"energy_active_import_max":1.583324544E9,"energy_active_import_count":50,"energy_active_export":0.0,"energy_active_export_min":4964.416016,"energy_active_export_max":4964.416016,"energy_active_export_count":50}}
-Key: com.example.utils.StreamKeyUtil@450d7a00
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@450d7a00
 Start: 1752719400000 End: 1752723000000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752719400000,"to":1752723000000,"isAgg":true,"durationLogsAgg":{"energy_active_import":952448.0,"energy_active_import_min":1.5833248E9,"energy_active_import_max":1.584276992E9,"energy_active_import_count":67,"energy_active_export":2.255858999999873,"energy_active_export_min":4964.416016,"energy_active_export_max":4966.671875,"energy_active_export_count":67}}
-Key: com.example.utils.StreamKeyUtil@70269297
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@70269297
 Start: 1752723000000 End: 1752726600000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752723000000,"to":1752726600000,"isAgg":true,"durationLogsAgg":{"energy_active_import":-951808.0,"energy_active_import_min":1.583325184E9,"energy_active_import_max":1.584276992E9,"energy_active_import_count":38,"energy_active_export":-1.8320309999999154,"energy_active_export_min":4964.839844,"energy_active_export_max":4966.671875,"energy_active_export_count":38}}
-Key: com.example.utils.StreamKeyUtil@310512c5
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@310512c5
 Start: 1752726600000 End: 1752730200000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752726600000,"to":1752730200000,"isAgg":true,"durationLogsAgg":{"energy_active_import":128.0,"energy_active_import_min":1.583325312E9,"energy_active_import_max":1.583325312E9,"energy_active_import_count":51,"energy_active_export":0.0,"energy_active_export_min":4964.839844,"energy_active_export_max":4964.839844,"energy_active_export_count":51}}
-Key: com.example.utils.StreamKeyUtil@15fb8e26
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@15fb8e26
 Start: 1752730200000 End: 1752733800000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752730200000,"to":1752733800000,"isAgg":true,"durationLogsAgg":{"energy_active_import":0.0,"energy_active_import_min":1.583325312E9,"energy_active_import_max":1.583325312E9,"energy_active_import_count":39,"energy_active_export":0.0,"energy_active_export_min":4964.839844,"energy_active_export_max":4964.839844,"energy_active_export_count":39}}
-Key: com.example.utils.StreamKeyUtil@3b082be3
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@3b082be3
 Start: 1752733800000 End: 1752737400000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752733800000,"to":1752737400000,"isAgg":true,"durationLogsAgg":{"energy_active_import":99712.0,"energy_active_import_min":1.583325312E9,"energy_active_import_max":1.583425024E9,"energy_active_import_count":29,"energy_active_export":0.3041990000001533,"energy_active_export_min":4964.839844,"energy_active_export_max":4965.144043,"energy_active_export_count":29}}
-Key: com.example.utils.StreamKeyUtil@7f7eb43f
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@7f7eb43f
 Start: 1752737400000 End: 1752741000000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752737400000,"to":1752741000000,"isAgg":true,"durationLogsAgg":{"energy_active_import":125696.0,"energy_active_import_min":1.583440256E9,"energy_active_import_max":1.58355072E9,"energy_active_import_count":38,"energy_active_export":0.06396499999937078,"energy_active_export_min":4965.144043,"energy_active_export_max":4965.208008,"energy_active_export_count":38}}
-Key: com.example.utils.StreamKeyUtil@6674022f
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@6674022f
 Start: 1752741000000 End: 1752744600000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752741000000,"to":1752744600000,"isAgg":true,"durationLogsAgg":{"energy_active_import":0.0,"energy_active_import_min":1.58355072E9,"energy_active_import_max":1.58355072E9,"energy_active_import_count":39,"energy_active_export":0.0,"energy_active_export_min":4965.208008,"energy_active_export_max":4965.208008,"energy_active_export_count":39}}
-Key: com.example.utils.StreamKeyUtil@2f373a79
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@2f373a79
 Start: 1752744600000 End: 1752748200000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752744600000,"to":1752748200000,"isAgg":true,"durationLogsAgg":{"energy_active_import":0.0,"energy_active_import_min":1.58355072E9,"energy_active_import_max":1.58355072E9,"energy_active_import_count":72,"energy_active_export":0.0,"energy_active_export_min":4965.208008,"energy_active_export_max":4965.208008,"energy_active_export_count":72}}
-Key: com.example.utils.StreamKeyUtil@551a4b4f
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@551a4b4f
 Start: 1752748200000 End: 1752751800000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752748200000,"to":1752751800000,"isAgg":true,"durationLogsAgg":{"energy_active_import":74752.0,"energy_active_import_min":1.58355072E9,"energy_active_import_max":1.583625472E9,"energy_active_import_count":65,"energy_active_export":0.0,"energy_active_export_min":4965.208008,"energy_active_export_max":4965.208008,"energy_active_export_count":65}}
-Key: com.example.utils.StreamKeyUtil@5fcfc29f
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@5fcfc29f
 Start: 1752751800000 End: 1752755400000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752751800000,"to":1752755400000,"isAgg":true,"durationLogsAgg":{"energy_active_import":159360.0,"energy_active_import_min":1.583628032E9,"energy_active_import_max":1.583784832E9,"energy_active_import_count":66,"energy_active_export":0.0,"energy_active_export_min":4965.208008,"energy_active_export_max":4965.208008,"energy_active_export_count":66}}
-Key: com.example.utils.StreamKeyUtil@196cc633
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@196cc633
 Start: 1752755400000 End: 1752759000000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752755400000,"to":1752759000000,"isAgg":true,"durationLogsAgg":{"energy_active_import":384.0,"energy_active_import_min":1.58378496E9,"energy_active_import_max":1.583785216E9,"energy_active_import_count":24,"energy_active_export":0.0,"energy_active_export_min":4965.208008,"energy_active_export_max":4965.208008,"energy_active_export_count":24}}
-Key: com.example.utils.StreamKeyUtil@f9ed395
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@f9ed395
 Start: 1752759000000 End: 1752762600000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752759000000,"to":1752762600000,"isAgg":true,"durationLogsAgg":{"energy_active_import":0.0,"energy_active_import_min":1.583785216E9,"energy_active_import_max":1.583785216E9,"energy_active_import_count":3,"energy_active_export":0.0,"energy_active_export_min":4965.208008,"energy_active_export_max":4965.208008,"energy_active_export_count":3}}
-Key: com.example.utils.StreamKeyUtil@8d9a11a
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@8d9a11a
 Start: 1752762600000 End: 1752766200000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752762600000,"to":1752766200000,"isAgg":true,"durationLogsAgg":{"energy_active_import":1536.0,"energy_active_import_min":1.583785216E9,"energy_active_import_max":1.583786752E9,"energy_active_import_count":27,"energy_active_export":0.056152000000111,"energy_active_export_min":4965.208008,"energy_active_export_max":4965.26416,"energy_active_export_count":27}}
-Key: com.example.utils.StreamKeyUtil@29a341a4
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@29a341a4
 Start: 1752766200000 End: 1752769800000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752766200000,"to":1752769800000,"isAgg":true,"durationLogsAgg":{"energy_active_import":93952.0,"energy_active_import_min":1.583786752E9,"energy_active_import_max":1.583880704E9,"energy_active_import_count":69,"energy_active_export":0.3676759999998467,"energy_active_export_min":4965.26416,"energy_active_export_max":4965.631836,"energy_active_export_count":69}}
-Key: com.example.utils.StreamKeyUtil@568157fd
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@568157fd
 Start: 1752769800000 End: 1752773400000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752769800000,"to":1752773400000,"isAgg":true,"durationLogsAgg":{"energy_active_import":32640.0,"energy_active_import_min":1.583880704E9,"energy_active_import_max":1.583913344E9,"energy_active_import_count":72,"energy_active_export":0.7363280000008672,"energy_active_export_min":4965.631836,"energy_active_export_max":4966.368164,"energy_active_export_count":72}}
-Key: com.example.utils.StreamKeyUtil@2f7a34c3
+Key: com.kazam_dlg_ingest.utils.StreamKeyUtil@2f7a34c3
 Start: 1752773400000 End: 1752777000000
 Value:
 {"comb_id":"3z3gc8h3-6","meter_id":"6","dlg_id":"3z3gc8h3","zone_id":"q68sdl0a","org":"greencell_nuego","app_id":"null","from":1752773400000,"to":1752777000000,"isAgg":true,"durationLogsAgg":{"energy_active_import":151552.0,"energy_active_import_min":1.583915776E9,"energy_active_import_max":1.584064896E9,"energy_active_import_count":70,"energy_active_export":0.0,"energy_active_export_min":4966.368164,"energy_active_export_max":4966.368164,"energy_active_export_count":70}}

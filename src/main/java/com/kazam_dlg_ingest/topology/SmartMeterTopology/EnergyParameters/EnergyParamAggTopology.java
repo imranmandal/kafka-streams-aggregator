@@ -1,0 +1,119 @@
+package com.kazam_dlg_ingest.topology.SmartMeterTopology.EnergyParameters;
+
+import com.kazam_dlg_ingest.DlgIngestAggregatorApp.AggregatorTopology;
+import com.kazam_dlg_ingest.models.EnergyParameterModels.EnergyParamBaseModel;
+import com.kazam_dlg_ingest.topology.AggregationBaseTopology;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class EnergyParamAggTopology extends AggregationBaseTopology {
+
+    public EnergyParamAggMinMaxTopology durationLogsAgg = null;
+    public EnergyParamPacketsAggTopology packetsAgg = null;
+    AggregatorTopology[] topologyStages;
+    // public DailyAggTopology uptime;
+
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+    @JsonIgnore
+    private EnergyParamAggTopology defaultValue; // for serder to ignore defaultValue
+
+    public EnergyParamAggTopology(EnergyParamAggTopology acc, EnergyParamBaseModel curr,
+            AggregatorTopology[] topologyStages) {
+        super(curr);
+
+        if (acc == null || curr == null)
+            return;
+
+        this.topologyStages = topologyStages;
+        for (AggregatorTopology topology : topologyStages) {
+
+            try {
+                if (topology == AggregatorTopology.DURATION_LOG_AGG) {
+                    this.durationLogsAgg = new EnergyParamAggMinMaxTopology(acc, curr).getData();
+                } else if (topology == AggregatorTopology.PACKETS_AGG) {
+                    this.packetsAgg = new EnergyParamPacketsAggTopology(acc, curr).getData();
+                }
+            } catch (Exception e) {
+                System.err
+                        .println("\nEnergyParamAggTopology " + " topology:" + topology + ", error: " + e.getMessage());
+            }
+        }
+
+    }
+
+    public EnergyParamAggTopology getDefaultValue() {
+        return this;
+    }
+
+    public EnergyParamAggTopology parse(JsonNode packet) {
+        if (packet == null)
+            return this;
+
+        if (packet.has("comb_id"))
+            this.comb_id = packet.get("comb_id").asText();
+
+        if (packet.has("meter_id"))
+            this.meter_id = packet.get("meter_id").asText();
+
+        if (packet.has("dlg_id"))
+            this.dlg_id = packet.get("dlg_id").asText();
+
+        if (packet.has("zone_id"))
+            this.zone_id = packet.get("zone_id").asText();
+
+        if (packet.has("org"))
+            this.org = packet.get("org").asText();
+
+        if (packet.has("app_id"))
+            this.app_id = packet.get("app_id").asText();
+
+        if (packet.has("from") && packet.get("from") != null && !packet.get("from").isNull()) {
+            this.from = (packet.get("from").longValue());
+        }
+
+        if (packet.has("to") && packet.get("to") != null && !packet.get("to").isNull()) {
+            this.to = (packet.get("to").longValue());
+        }
+
+        if (packet.has("utc_offset") && packet.get("utc_offset") != null && !packet.get("utc_offset").isNull()) {
+            this.utc_offset = (packet.get("utc_offset").intValue());
+        }
+
+        if (packet.has("durationLogsAgg") && packet.get("durationLogsAgg").has("min_max_agg"))
+            this.durationLogsAgg = new EnergyParamAggMinMaxTopology(null, null)
+                    .parse(packet.get("durationLogsAgg").get("min_max_agg"));
+
+        if (packet.has("packetsAgg"))
+            this.packetsAgg = new EnergyParamPacketsAggTopology(null, null).parse(packet.get("packetsAgg"));
+
+        return this;
+
+    }
+
+    // public EnergyParamAgg aggregate(EnergyParamAgg acc, EnergyParamBaseModel
+    // curr) {
+    // // this.dailyUptime = new DailyAggTopology().parse(acc, curr);
+    // // need to handle rest agg here
+    // this.durationLogsAgg = new EnergyParamAggLogsTopology(acc, curr).getData();
+
+    // return this;
+    // }
+
+    public void setTimestamp(long from, long to) {
+        this.from = from;
+        this.to = to;
+    }
+
+    @JsonIgnore
+    public JsonNode toJsonNode() {
+        JsonNode result = mapper.valueToTree(this);
+        return result;
+    }
+
+    @JsonIgnore
+    public EnergyParamAggTopology getData() {
+        return this;
+    }
+}
