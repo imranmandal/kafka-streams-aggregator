@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MeterUptimePacketsAggTopology {
-    public Long total_time = 0L;
-    public Long online_time = 0L;
+    public Integer packetCount = 0;
     public List<MeterUptimePacketModel> packets = new ArrayList<>();
 
     public MeterUptimePacketsAggTopology(MeterUptimeAggTopology agg, MeterUptimeBaseModel packet) {
@@ -25,15 +24,16 @@ public class MeterUptimePacketsAggTopology {
                 }
 
                 if (packet != null) {
-                    this.online_time = agg.packetsAgg.online_time + packet.online_time;
+                    this.packetCount = agg.packetsAgg.packetCount + 1;
                 }
             }
 
         if (packet != null) {
             this.packets.add(new MeterUptimePacketModel(packet).getData());
+            this.packetCount = 1;
 
-            if (this.online_time == 0L)
-                this.online_time = packet.online_time;
+            // if (this.online_time == 0L)
+            // this.online_time = packet.online_time;
         }
     }
 
@@ -43,14 +43,9 @@ public class MeterUptimePacketsAggTopology {
     }
 
     public MeterUptimePacketsAggTopology parse(JsonNode aggData) {
-        JsonNode totalTimeJsonNode = aggData.get("total_time");
-        if (totalTimeJsonNode != null && !totalTimeJsonNode.isNull()) {
-            this.total_time = totalTimeJsonNode.longValue();
-        }
-
-        JsonNode onlineTimeJsonNode = aggData.get("online_time");
-        if (onlineTimeJsonNode != null && !onlineTimeJsonNode.isNull()) {
-            this.online_time = onlineTimeJsonNode.longValue();
+        JsonNode totalCountJsonNode = aggData.get("packetCount");
+        if (totalCountJsonNode != null && !totalCountJsonNode.isNull()) {
+            this.packetCount = totalCountJsonNode.intValue();
         }
 
         if (aggData.has("packets") && aggData.get("packets").isArray()) {

@@ -11,7 +11,7 @@ public class MeterUptimeAggTopology extends AggregationBaseTopology {
     private static final ObjectMapper mapper = new ObjectMapper();
     AggregatorTopology[] topologyStages;
 
-    public Integer packetCount = 0;
+    public MeterUptimeLogTopology durationLogAgg = new MeterUptimeLogTopology(null, null);
     public MeterUptimePacketsAggTopology packetsAgg = new MeterUptimePacketsAggTopology(null, null).getData();
 
     public MeterUptimeAggTopology(MeterUptimeAggTopology agg, MeterUptimeBaseModel packet,
@@ -27,8 +27,7 @@ public class MeterUptimeAggTopology extends AggregationBaseTopology {
         try {
             for (AggregatorTopology topology : this.topologyStages) {
                 if (topology == AggregatorTopology.DURATION_LOG_AGG) {
-                    if (agg != null)
-                        this.packetCount = agg.packetCount + 1;
+                    this.durationLogAgg = new MeterUptimeLogTopology(agg, packet);
                 } else if (topology == AggregatorTopology.PACKETS_AGG) {
                     this.packetsAgg = new MeterUptimePacketsAggTopology(agg, packet).getData();
                 }
@@ -47,7 +46,7 @@ public class MeterUptimeAggTopology extends AggregationBaseTopology {
     public void setTimestamp(long from, long to) {
         this.from = from;
         this.to = to;
-        this.packetsAgg.total_time = to - from;
+        this.durationLogAgg.total_time = to - from;
     }
 
     public MeterUptimeAggTopology parse(JsonNode packet) {
@@ -84,15 +83,12 @@ public class MeterUptimeAggTopology extends AggregationBaseTopology {
             this.utc_offset = (packet.get("utc_offset").intValue());
         }
 
-        if (packet.has("packetCount"))
-            this.packetCount = packet.get("packetCount").intValue();
+        if (packet.has("durationLogAgg"))
+            this.durationLogAgg = new MeterUptimeLogTopology(null, null).parse(packet.get("durationLogAgg"));
 
         if (packet.has("packetsAgg"))
-            this.packetsAgg = new MeterUptimePacketsAggTopology(
-                    null,
-                    null)
-                    .parse(packet.get("packetsAgg"));
-
+            this.packetsAgg = new MeterUptimePacketsAggTopology(null, null).parse(packet.get("packetsAgg"));
+            
         return this;
 
     }

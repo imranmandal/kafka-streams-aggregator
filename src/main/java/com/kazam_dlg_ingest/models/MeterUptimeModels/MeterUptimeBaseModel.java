@@ -24,7 +24,7 @@ public class MeterUptimeBaseModel extends DlgPacketBaseModel {
             }
 
             if (this.prevMeterUptimePkt != null) {
-                Long time = (this.timestamp - this.prevMeterUptimePkt.timestamp) * 1000;
+                Long time = ((this.timestamp * 1000) - (this.prevMeterUptimePkt.timestamp * 1000));
                 if (time < TIME_TO_OFFLINE) {
                     this.online_time = time;
                 }
