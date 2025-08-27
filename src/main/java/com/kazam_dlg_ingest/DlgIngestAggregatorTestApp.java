@@ -54,6 +54,8 @@ public class DlgIngestAggregatorTestApp {
         String app_id = dotenv.get("APPLICATION_ID", "aggregator-app");
         String kafka_broker = dotenv.get("KAFKA_BROKER", "localhost:9092");
 
+        System.out.println("kafka_broker " + kafka_broker);
+
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, app_id);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafka_broker);
@@ -219,7 +221,7 @@ public class DlgIngestAggregatorTestApp {
 
         streams.cleanUp();
         streams.start();
-        System.out.println("DlgIngestAggregatorApp started. Waiting for messages...");
+        System.out.println("🪇 DlgIngestAggregatorTestApp started. Waiting for messages...");
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
 }

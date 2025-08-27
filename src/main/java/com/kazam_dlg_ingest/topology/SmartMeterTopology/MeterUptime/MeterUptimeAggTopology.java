@@ -16,7 +16,7 @@ public class MeterUptimeAggTopology extends AggregationBaseTopology {
 
     public MeterUptimeAggTopology(MeterUptimeAggTopology agg, MeterUptimeBaseModel packet,
             AggregatorTopology[] topologyStages) {
-                
+
         super(packet);
 
         this.topologyStages = topologyStages;
@@ -25,10 +25,15 @@ public class MeterUptimeAggTopology extends AggregationBaseTopology {
             return;
 
         try {
-            if (agg != null)
-                this.packetCount = agg.packetCount + 1;
+            for (AggregatorTopology topology : this.topologyStages) {
+                if (topology == AggregatorTopology.DURATION_LOG_AGG) {
+                    if (agg != null)
+                        this.packetCount = agg.packetCount + 1;
+                } else if (topology == AggregatorTopology.PACKETS_AGG) {
+                    this.packetsAgg = new MeterUptimePacketsAggTopology(agg, packet).getData();
+                }
 
-            this.packetsAgg = new MeterUptimePacketsAggTopology(agg, packet).getData();
+            }
         } catch (Exception e) {
             System.err.println("MeterUptimeAggTopology" + e.getMessage());
         }
